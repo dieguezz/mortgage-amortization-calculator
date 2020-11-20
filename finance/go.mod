@@ -1,3 +1,3 @@
-module github.com/mortgage-amortization-calculator/finance
+module github.com/dieguezz/mortgage-amortization-calculator/finance
 
 go 1.15
