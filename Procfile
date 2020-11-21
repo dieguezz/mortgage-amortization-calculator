@@ -1,1 +1,1 @@
-web: amortization-calc
+web: mortgage-amortization-calculator
