@@ -1,0 +1,14 @@
+### Http microservice for retrieving mortgage calculations
+
+Endpoint: https://localhost:8080
+Methd: GET 
+Params: 
+
+| name               | type    | required |
+| ------------------ | ------- | -------- |
+| capital            | float64 | true     |
+| terms              | int     | true     |
+| interestType       | float64 | true     |
+| amortizationAmount | float64 | false    |
+| year               | int     | false    |
+| month              | int     | false    |
