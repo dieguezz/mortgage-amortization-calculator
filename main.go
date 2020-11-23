@@ -11,6 +11,8 @@ func startServer() {
 	r := gin.Default()
 
 	r.POST("/", func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+
 		capital, err := strconv.ParseFloat(c.PostForm("capital"), 64)
 		if err != nil {
 			c.JSON(400, gin.H{"error": "El campo es obligatorio"})
