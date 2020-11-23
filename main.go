@@ -12,6 +12,7 @@ func startServer() {
 
 	r.POST("/", func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "http://localhost:5000")
+		c.Header("Access-Control-Allow-Credentials", "true")
 
 		capital, err := strconv.ParseFloat(c.PostForm("capital"), 64)
 		if err != nil {
