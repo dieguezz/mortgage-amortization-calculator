@@ -10,31 +10,31 @@ import (
 func startServer() {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		capital, err := strconv.ParseFloat(c.Query("capital"), 64)
+	r.POST("/", func(c *gin.Context) {
+		capital, err := strconv.ParseFloat(c.PostForm("capital"), 64)
 		if err != nil {
 			c.JSON(400, gin.H{"error": "El campo es obligatorio"})
 			return
 		}
-		terms, err := strconv.Atoi(c.Query("terms"))
+		terms, err := strconv.Atoi(c.PostForm("terms"))
 		if err != nil {
 			c.JSON(400, gin.H{"error": "El campo es obligatorio"})
 			return
 		}
-		interestType, err := strconv.ParseFloat(c.Query("interestType"), 64)
+		interestType, err := strconv.ParseFloat(c.PostForm("interestType"), 64)
 		if err != nil {
 			c.JSON(400, gin.H{"error": "El campo es obligatorio"})
 			return
 		}
-		amortizationAmount, err := strconv.ParseFloat(c.Query("amortizationAmount"), 64)
+		amortizationAmount, err := strconv.ParseFloat(c.PostForm("amortizationAmount"), 64)
 		if err != nil {
 			amortizationAmount = 0
 		}
-		year, err := strconv.Atoi(c.Query("year"))
+		year, err := strconv.Atoi(c.PostForm("year"))
 		if err != nil {
 			year = 0
 		}
-		month, err := strconv.Atoi(c.Query("month"))
+		month, err := strconv.Atoi(c.PostForm("month"))
 		if err != nil {
 			month = 0
 		}

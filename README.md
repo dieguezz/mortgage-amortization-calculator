@@ -12,3 +12,15 @@ Params:
 | amortizationAmount | float64 | false    |
 | year               | int     | false    |
 | month              | int     | false    |
+
+Response: 
+```JSON
+{
+    "interestSavingsForPrice": 12189.52,
+    "monthlyPrice": 194.22,
+    "pendingPayments": 302,
+    "timeSavingsMonth": 10,
+    "timeSavingsYear": 14,
+    "totalTimeInterest": 22542.83
+}
+```
