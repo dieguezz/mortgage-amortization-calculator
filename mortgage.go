@@ -18,7 +18,7 @@ type fee struct {
 }
 
 // CalcMortgageAmortization wht
-func CalcMortgageAmortization(capitalInput float64, termsInput int, interestTypeInput float64, amortizationAmountInput float64, amortizationYearInput int, amortizationMonthInput int) (float64, float64, int, int, int, float64) {
+func CalcMortgageAmortization(capitalInput float64, termsInput int, interestTypeInput float64, amortizationAmountInput float64, amortizationYearInput int, amortizationMonthInput int) (float64, float64, int, int, int, float64, fee[]) {
 
 	numberOfpayments := termsInput * 12
 	fees := make([]fee, int(numberOfpayments+1))
@@ -96,5 +96,5 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 
 	interestSavingsForPrice := math.Round((totalInterest-accInterest)*100) / 100
 
-	return interestSavingsForPrice, monthlyPrice, pendingPayments, timeSavingsYear, timeSavingsMonth, math.Round((totalTimeInterest)*100) / 100
+	return interestSavingsForPrice, monthlyPrice, pendingPayments, timeSavingsYear, timeSavingsMonth, math.Round((totalTimeInterest)*100) / 100, fees
 }

@@ -42,7 +42,7 @@ func startServer() {
 			month = 0
 		}
 
-		interestSavingsForPrice, monthlyPrice, pendingPayments, timeSavingsYear, timeSavingsMonth, totalTimeInterest := CalcMortgageAmortization(capital, terms, interestType, amortizationAmount, year, month)
+		interestSavingsForPrice, monthlyPrice, pendingPayments, timeSavingsYear, timeSavingsMonth, totalTimeInterest, fees := CalcMortgageAmortization(capital, terms, interestType, amortizationAmount, year, month)
 		result := map[string]interface{}{
 			"interestSavingsForPrice": interestSavingsForPrice,
 			"monthlyPrice":            monthlyPrice,
@@ -50,6 +50,7 @@ func startServer() {
 			"timeSavingsYear":         timeSavingsYear,
 			"timeSavingsMonth":        timeSavingsMonth,
 			"totalTimeInterest":       totalTimeInterest,
+			"fees":                    fees,
 		}
 		c.JSON(http.StatusOK, gin.H(result))
 	})
