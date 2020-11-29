@@ -1,20 +1,23 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"math"
 )
 
+// Fee what
 type Fee struct {
-	year                  int
-	month                 int
-	price                 float64
-	priceForTime          float64
-	interest              float64
-	interestForTime       float64
-	amortization          float64
-	amortizationFortime   float64
-	pendingCapital        float64
-	pendingCapitalForTime float64
+	Year                  int     `json:"year"`
+	Month                 int     `json:"month"`
+	Price                 float64 `json:"price"`
+	PriceForTime          float64 `json:"priceForTime"`
+	Interest              float64 `json:"interest"`
+	InterestForTime       float64 `json:"interestForTime"`
+	Amortization          float64 `json:"amortization"`
+	AmortizationFortime   float64 `json:"amortizationFortime"`
+	PendingCapital        float64 `json:"pendingCapital"`
+	PendingCapitalForTime float64 `json:"pendingCapitalForTime"`
 }
 
 // CalcMortgageAmortization wht
@@ -31,7 +34,7 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 	pendingPayments := 0
 
 	var accInterest float64
-
+	jsonFees := make([]Fee, int(numberOfpayments+1))
 	for i := 0; i <= numberOfpayments; i++ {
 		if i == 0 {
 			fees[0] = Fee{0, 0, 0, 0, 0, 0, 0, 0, capitalInput, capitalInput}
@@ -42,15 +45,15 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 		var amortizationFortime float64
 		year := float64((i / 12) + 1)
 		previousFee := fees[i-1]
-		interest := (previousFee.pendingCapital * monthlyInterest) / 100
-		interestForTime := (previousFee.pendingCapitalForTime * monthlyInterest) / 100
+		interest := (previousFee.PendingCapital * monthlyInterest) / 100
+		interestForTime := (previousFee.PendingCapitalForTime * monthlyInterest) / 100
 		var priceForTime float64
-		if (previousFee.pendingCapitalForTime < previousFee.priceForTime) || previousFee.pendingCapitalForTime == 0 {
-			priceForTime = previousFee.pendingCapitalForTime + interestForTime
+		if (previousFee.PendingCapitalForTime < previousFee.PriceForTime) || previousFee.PendingCapitalForTime == 0 {
+			priceForTime = previousFee.PendingCapitalForTime + interestForTime
 		} else {
 			priceForTime = Pmt(interestTypeInput, float64(numberOfpayments), capitalInput, 0, 0) * -1
 		}
-		price := Pmt(interestTypeInput, float64(int(numberOfpayments)-previousFee.month), previousFee.pendingCapital, 0, 0) * -1
+		price := Pmt(interestTypeInput, float64(int(numberOfpayments)-previousFee.Month), previousFee.PendingCapital, 0, 0) * -1
 		finalPrice := math.Round(priceForTime*100) / 100
 		amortizationRealMonth := int(((amortizationYearInput - 1) * 12) + amortizationMonthInput)
 
@@ -65,8 +68,8 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 			amortizationFortime = priceForTime - interestForTime
 		}
 
-		pendingCapital := previousFee.pendingCapital - amortization
-		pendingCapitalForTime := previousFee.pendingCapitalForTime - amortizationFortime
+		pendingCapital := previousFee.PendingCapital - amortization
+		pendingCapitalForTime := previousFee.PendingCapitalForTime - amortizationFortime
 
 		if finalPrice > 0 {
 			pendingPayments++
@@ -74,20 +77,32 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 		}
 
 		itemFee := Fee{
-			int(math.Floor(year)),
-			i,
-			finalPrice,
-			math.Round(priceForTime*100) / 100,
-			math.Round(interest*100) / 100,
-			math.Round(interestForTime*100) / 100,
-			math.Round(amortization*100) / 100,
-			math.Round(amortizationFortime*100) / 100,
-			math.Round(pendingCapital*100) / 100,
-			math.Round(pendingCapitalForTime*100) / 100,
+			Year:                  int(math.Floor(year)),
+			Month:                 i,
+			Price:                 finalPrice,
+			PriceForTime:          math.Round(priceForTime*100) / 100,
+			Interest:              math.Round(interest*100) / 100,
+			InterestForTime:       math.Round(interestForTime*100) / 100,
+			Amortization:          math.Round(amortization*100) / 100,
+			AmortizationFortime:   math.Round(amortizationFortime*100) / 100,
+			PendingCapital:        math.Round(pendingCapital*100) / 100,
+			PendingCapitalForTime: math.Round(pendingCapitalForTime*100) / 100,
+		}
+
+		bytes, err := json.Marshal(&itemFee)
+
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			var p Fee
+			err = json.Unmarshal(bytes, &p)
+			if err != nil {
+				panic(err)
+			}
+			jsonFees[i] = p
 		}
 
 		fees[i] = itemFee
-
 		accInterest += interest
 	}
 
@@ -96,5 +111,5 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 
 	interestSavingsForPrice := math.Round((totalInterest-accInterest)*100) / 100
 
-	return interestSavingsForPrice, monthlyPrice, pendingPayments, timeSavingsYear, timeSavingsMonth, math.Round((totalTimeInterest)*100) / 100, fees
+	return interestSavingsForPrice, monthlyPrice, pendingPayments, timeSavingsYear, timeSavingsMonth, math.Round((totalTimeInterest)*100) / 100, jsonFees
 }

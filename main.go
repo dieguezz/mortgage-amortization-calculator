@@ -43,6 +43,10 @@ func startServer() {
 		}
 
 		interestSavingsForPrice, monthlyPrice, pendingPayments, timeSavingsYear, timeSavingsMonth, totalTimeInterest, fees := CalcMortgageAmortization(capital, terms, interestType, amortizationAmount, year, month)
+		// fmt.Println(fees)
+
+		// parsedFees, _ := json.Marshal(&fees)
+		// fmt.Println(parsedFees)
 		result := map[string]interface{}{
 			"interestSavingsForPrice": interestSavingsForPrice,
 			"monthlyPrice":            monthlyPrice,
@@ -50,7 +54,7 @@ func startServer() {
 			"timeSavingsYear":         timeSavingsYear,
 			"timeSavingsMonth":        timeSavingsMonth,
 			"totalTimeInterest":       totalTimeInterest,
-			"fees":                    fees,
+			"fees":                    &fees,
 		}
 		c.JSON(http.StatusOK, gin.H(result))
 	})
