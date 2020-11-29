@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-type fee struct {
+type Fee struct {
 	year                  int
 	month                 int
 	price                 float64
@@ -18,10 +18,10 @@ type fee struct {
 }
 
 // CalcMortgageAmortization wht
-func CalcMortgageAmortization(capitalInput float64, termsInput int, interestTypeInput float64, amortizationAmountInput float64, amortizationYearInput int, amortizationMonthInput int) (float64, float64, int, int, int, float64, fee[]) {
+func CalcMortgageAmortization(capitalInput float64, termsInput int, interestTypeInput float64, amortizationAmountInput float64, amortizationYearInput int, amortizationMonthInput int) (float64, float64, int, int, int, float64, []Fee) {
 
 	numberOfpayments := termsInput * 12
-	fees := make([]fee, int(numberOfpayments+1))
+	fees := make([]Fee, int(numberOfpayments+1))
 	monthlyPayment := Pmt(float64(interestTypeInput), float64(numberOfpayments), capitalInput*-1, 0, 0)
 	monthlyInterest := interestTypeInput / 12
 	totalToPay := monthlyPayment * float64(numberOfpayments)
@@ -34,7 +34,7 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 
 	for i := 0; i <= numberOfpayments; i++ {
 		if i == 0 {
-			fees[0] = fee{0, 0, 0, 0, 0, 0, 0, 0, capitalInput, capitalInput}
+			fees[0] = Fee{0, 0, 0, 0, 0, 0, 0, 0, capitalInput, capitalInput}
 			continue
 		}
 
@@ -73,7 +73,7 @@ func CalcMortgageAmortization(capitalInput float64, termsInput int, interestType
 			totalTimeInterest -= interest
 		}
 
-		itemFee := fee{
+		itemFee := Fee{
 			int(math.Floor(year)),
 			i,
 			finalPrice,
