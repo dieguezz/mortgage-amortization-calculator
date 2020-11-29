@@ -16,17 +16,17 @@ func startServer() {
 
 		capital, err := strconv.ParseFloat(c.PostForm("capital"), 64)
 		if err != nil {
-			c.JSON(400, gin.H{"error": "El campo es obligatorio"})
+			c.JSON(400, gin.H{"error": err})
 			return
 		}
 		terms, err := strconv.Atoi(c.PostForm("terms"))
 		if err != nil {
-			c.JSON(400, gin.H{"error": "El campo es obligatorio"})
+			c.JSON(400, gin.H{"error": err})
 			return
 		}
 		interestType, err := strconv.ParseFloat(c.PostForm("interestType"), 64)
 		if err != nil {
-			c.JSON(400, gin.H{"error": "El campo es obligatorio"})
+			c.JSON(400, gin.H{"error": err})
 			return
 		}
 		amortizationAmount, err := strconv.ParseFloat(c.PostForm("amortizationAmount"), 64)
